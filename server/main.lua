@@ -189,7 +189,7 @@ Core.Callback.Register('bcc-water:GetItem', function(source, cb, itemType, itemA
             local itemName = pump and Config.cleanBucket or Config.dirtyBucket
 
             exports.vorp_inventory:addItem(src, itemName, 1, { source = sourceType })
-            DebugPrint('Added item to source ' .. src .. ': ' .. itemName', Pump: ' .. tostring(pump))
+            DebugPrint('Added item to source ' .. src .. ': ' .. itemName .. ', Pump: ' .. tostring(pump))
         end
     end
 
