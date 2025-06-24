@@ -4,35 +4,36 @@
 
 ## Features
 
--   **Hydration Management**: Carry a canteen of water to drink and quench thirst.
--   **Multi-Use Canteen**: Drink multiple times from a full canteen, with configurable usage limits.
--   **Metabolism Integration**: Compatible with various metabolism scripts to manage thirst levels.
--   **Water Source Interactions**:
-    -   Refill canteens, buckets and bottles at water pumps, sinks, rivers, and lakes.
-    -   Drink directly from natural water sources to preserve canteen water.
--   **Health and Stamina Configurations**: Separate settings for drinking from canteens and wild waters.
--   **Hygiene Options**: Players can wash in rivers, lakes, and at water pumps or sinks.
--   **Risk Factor**: Players may get sick and perish after drinking wild water (even from a bottle).
--   **Utility**: Fill water buckets and bottles for use in other scripts.
+- **Hydration Management**: Carry a canteen of water to drink and quench thirst.
+- **Multi-Use Canteen**: Drink multiple times from a full canteen, with configurable usage limits.
+- **Metabolism Integration**: Compatible with various metabolism scripts to manage thirst levels.
+- **Water Source Interactions**:
+  - Refill canteens, buckets and bottles at water pumps, sinks, rivers, and lakes.
+  - Drink directly from natural water sources to preserve canteen water.
+- **Health and Stamina Configurations**: Separate settings for drinking from canteens and wild waters.
+- **Hygiene Options**: Players can wash in rivers, lakes, and at water pumps or sinks.
+- **Risk Factor**: Players may get sick and perish after drinking wild water (even from a bottle).
+- **Utility**: Fill water buckets and bottles for use in other scripts.
 
 ## Dependencies
 
--   [vorp_core](https://github.com/VORPCORE/vorp-core-lua)
--   [vorp_inventory](https://github.com/VORPCORE/vorp_inventory-lua)
--   [bcc-utils](https://github.com/BryceCanyonCounty/bcc-utils)
--   [feather-menu](https://github.com/FeatherFramework/feather-menu/releases/tag/1.2.0)
+- [vorp_core](https://github.com/VORPCORE/vorp-core-lua)
+- [vorp_inventory](https://github.com/VORPCORE/vorp_inventory-lua)
+- [bcc-utils](https://github.com/BryceCanyonCounty/bcc-utils)
+- [feather-menu](https://github.com/FeatherFramework/feather-menu/releases/tag/1.2.0)
 
 ## Supported Metabolism Scripts
 
--   BLN HUD
--   VORP Metabolism
--   Fred Metabolism
--   Outsider Needs Metabolism
--   RSD Metabolism
--   NXT Metabolism
--   Andrade Metabolism
--   FX-HUD
--   Mega Metabolism
+- VORP Metabolism
+- Fred Metabolism
+- Outsider Needs Metabolism
+- RSD Metabolism
+- NXT Metabolism
+- Andrade Metabolism
+- FX-HUD
+- Mega Metabolism
+- POS-Metabolism
+- BLN HUD
 
 ## Installation
 
@@ -47,8 +48,8 @@
 
 ## Inspiration
 
--   **green_canteen**: This script draws inspiration from the green_canteen script.
+- **green_canteen**: This script draws inspiration from the green_canteen script.
 
 ## GitHub Repository
 
--   [bcc-water](https://github.com/BryceCanyonCounty/bcc-water)
+- [bcc-water](https://github.com/BryceCanyonCounty/bcc-water)
