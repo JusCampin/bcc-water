@@ -327,6 +327,10 @@ function WashPlayer(animType)
         exports.bln_hud:PlayerWash()
     end
 
+    if tonumber(Config.app) == 14 then
+        exports['bcc-corehud']:SetCleanStats(100.0)
+    end
+
     DBG.Info('Player washed successfully.')
 end
 
