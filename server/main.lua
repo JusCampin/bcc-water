@@ -226,4 +226,40 @@ if Config.useable.antidoteItem then
     end)
 end
 
+-- Check if Player has a specific item
+Core.Callback.Register('bcc-water:CheckItem', function(source, cb, itemName)
+    local src = source
+    local user = Core.getUser(src)
+    if not user then
+        DBG.Error(string.format('User not found for source: %d', src))
+        return cb(false)
+    end
+
+    local item = exports.vorp_inventory:getItem(src, itemName)
+    local hasItem = item and item.count > 0
+
+    DBG.Info(string.format('CheckItem for source %d, item %s: %s', src, itemName, tostring(hasItem)))
+    cb(hasItem)
+end)
+
+-- Remove a specific item from Player inventory
+Core.Callback.Register('bcc-water:RemoveItem', function(source, cb, itemName, amount)
+    local src = source
+    local user = Core.getUser(src)
+    if not user then
+        DBG.Error(string.format('User not found for source: %d', src))
+        return cb(false)
+    end
+
+    local item = exports.vorp_inventory:getItem(src, itemName)
+    if not item or item.count < amount then
+        DBG.Warning(string.format('Source %d does not have enough of item: %s (required: %d, has: %d)', src, itemName, amount, item and item.count or 0))
+        return cb(false)
+    end
+
+    exports.vorp_inventory:subItem(src, itemName, amount)
+    DBG.Info(string.format('Removed %d of item %s from source %d', amount, itemName, src))
+    cb(true)
+end)
+
 BccUtils.Versioner.checkFile(GetCurrentResourceName(), 'https://github.com/BryceCanyonCounty/bcc-water')

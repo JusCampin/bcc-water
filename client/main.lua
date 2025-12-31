@@ -141,7 +141,7 @@ local function HandleWaterInteraction(configType, promptGroup, actions, promptNa
         if Config.usePrompt then
             UiPromptSetActiveGroupThisFrame(promptGroup, CreateVarString(10, 'LITERAL_STRING', promptNameFunc()))
             for _, action in ipairs(actions) do
-                UiPromptSetVisible(Prompts[action.prompt], configType[action.configKey])
+                UiPromptSetVisible(Prompts[action.prompt], configType[action.configKey] == true)
             end
         else
             for _, action in ipairs(actions) do
@@ -239,20 +239,27 @@ AddEventHandler('bcc-water:WildWater', function()
         function()
             local hash = GetWaterMapZoneAtCoords(PlayerCoords.x, PlayerCoords.y, PlayerCoords.z)
             for _, loc in pairs(Locations) do
-                if loc.hash == hash then return loc.name end
+                if loc.hash == hash then
+                    return loc.name
+                end
             end
             return _U('wildWater') -- fallback
         end,
+
         function()
             local playerPed = PlayerPedId()
-            if not IsEntityInWater(playerPed) then return false end
-            local hash = GetWaterMapZoneAtCoords(PlayerCoords.x, PlayerCoords.y, PlayerCoords.z)
-            for _, loc in pairs(Locations) do
-                if loc.hash == hash then
-                    return (not Config.crouch or GetPedCrouchMovement(playerPed) ~= 0) and IsPedStill(playerPed)
-                end
+            if not IsEntityInWater(playerPed) then
+                return false
             end
-            return false
+
+            -- Updated check from santa
+            -- Optional crouch requirement
+            if Config.crouch and GetPedCrouchMovement(playerPed) == 0 then
+                return false
+            end
+
+            -- Must be standing still (so they don't spam while swimming)
+            return IsPedStill(playerPed)
         end
     )
 end)

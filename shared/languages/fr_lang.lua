@@ -22,5 +22,6 @@ Locales["fr_lang"] = {
     feelingSick = "Vous vous sentez malade à cause de l'eau...",
     feelingBetter = "Vous vous sentez mieux maintenant.",
     succumbed = "Vous avez succombé à la maladie...",
+    noSoap = "Vous avez besoin de savon pour vous laver !",
+    failedToUseSoap = "Échec de l'utilisation du savon.",
 }
-

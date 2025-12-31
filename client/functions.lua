@@ -296,6 +296,29 @@ function WashPlayer(animType)
     DBG.Info(string.format('Washing player with animation type: %s', tostring(animType)))
     local playerPed = PlayerPedId()
 
+    -- Check for soap requirement
+    if Config.requireSoap then
+        local hasSoap = Core.Callback.TriggerAwait('bcc-water:CheckItem', Config.soapItem)
+        if not hasSoap then
+            if Config.showMessages then
+                Core.NotifyRightTip(_U('noSoap'), 4000)
+            end
+            DBG.Info('Player does not have required soap item.')
+            return
+        end
+
+        -- Remove soap item
+        local soapRemoved = Core.Callback.TriggerAwait('bcc-water:RemoveItem', Config.soapItem, 1)
+        if not soapRemoved then
+            if Config.showMessages then
+                Core.NotifyRightTip(_U('failedToUseSoap'), 4000)
+            end
+            DBG.Info('Failed to remove soap item.')
+            return
+        end
+        DBG.Info('Soap item consumed for washing.')
+    end
+
     local animDict = ''
     local animName = 'idle_l'
 
@@ -433,7 +456,7 @@ function PlayerStats(isWild)
         [8] = function() TriggerEvent('hud:client:changeValue', 'Thirst', thirst) end,
         [9] = function() exports['fx-hud']:setStatus('thirst', thirst) end,
         [10] = function() local ClientAPI = exports['mega_metabolism']:api() ClientAPI.addMeta('water', thirst) end,
-        [11] = function() exports['POS-Metabolism']:UpdateMultipleStatus({ ["water"] = thirst, ["piss"] = thirst * 0.5 }) end,
+        [11] = function() exports['POS-Metabolism']:UpdateMultipleStatus({ ['water'] = thirst, ['piss'] = thirst * 0.5 }) end,
         [12] = function() exports.bln_hud:AddThirst(thirst) end,
         [13] = function() exports['SS-Metabolism']:RemoveThirsty(thirst) end,
         [14] = function()
@@ -443,6 +466,7 @@ function PlayerStats(isWild)
             end
             exports['bcc-corehud']:AddNeed('thirst', thirstDelta)
         end,
+        [15] = function() exports['cas-metabolism']:addMetabolismValue('thirst', thirst) end,
     }
 
     local function updateAttribute(attributeIndex, value, maxValue)

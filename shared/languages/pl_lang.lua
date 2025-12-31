@@ -21,5 +21,7 @@ Locales["pl_lang"] = {
     canteenDesc = "Przenośny pojemnik do noszenia wody.",
     feelingSick = "Czujesz się źle po tej wodzie...",
     feelingBetter = "Czujesz się już lepiej.",
-    succumbed = "Uległeś chorobie...",
+    succumbed = "Uległeś chorobie...", 
+    noSoap = "Potrzebujesz mydła, żeby się umyć!",
+    failedToUseSoap = "Nie udało się użyć mydła.",
 }

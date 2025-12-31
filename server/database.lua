@@ -1,7 +1,7 @@
 ---@type BCCWaterDebugLib
 local DBG = BCCWaterDebug
 
-local SEED_VERSION = 1
+local SEED_VERSION = 2
 
 local ITEMS = {
     { 'canteen', 'Canteen', 1, 1, 'item_standard', 1, 'A portable container to carry water.' },
@@ -12,6 +12,7 @@ local ITEMS = {
     { 'bcc_clean_bottle', 'Clean Water Bottle', 15, 1, 'item_standard', 1, 'A bottle filled with clean water.' },
     { 'bcc_dirty_bottle', 'Dirty Water Bottle', 15, 1, 'item_standard', 1, 'A bottle filled with dirty water.' },
     { 'antidote', 'Antidote', 5, 1, 'item_standard', 1, 'A remedy to cure sickness.' },
+    { 'bcc_soap_bar', 'Soap Bar', 10, 1, 'item_standard', 1, 'A bar of soap for washing.' },
 }
 
 local UPSERT_SQL = [[

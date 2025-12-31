@@ -22,4 +22,6 @@ Locales["nl_lang"] = {
     feelingSick = "Je voelt je ziek van het water...",
     feelingBetter = "Je voelt je nu beter.",
     succumbed = "Je bent bezweken aan de ziekte...",
+    noSoap = "Je hebt zeep nodig om jezelf te wassen!",
+    failedToUseSoap = "Zeep gebruiken is mislukt.",
 }

@@ -1,20 +1,4 @@
-<2.4.0>
-- Added suport for SetCleanStats - bcc-corehud
-
-<2.3.0>
-- Added support for bcc-corehud
-- Updated romanian translation
-
-<2.2.0>
-- Added support for SS-Metabolism
-- Updated debug system
-- Automated database function
-
-<2.1.7>
-- Fix "thirst update" for BLN HUD
-
-<2.1.6>
-- Fix for BLN HUD by safser2
-
-<2.1.5>
-- BLN HUD support added
+<2.4.1>
+- Add support for CAS Metabolism
+- Added optional soap item for washing player
+- Updated player in wild water check

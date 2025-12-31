@@ -22,4 +22,6 @@ Locales["ro_lang"] = {
     feelingSick = "Te simti rau din cauza apei...",
     feelingBetter = "Te simti mai bine acum.",
     succumbed = "Ai cedat bolii...",
+    noSoap = "Ai nevoie de săpun pentru a te spăla!",
+    failedToUseSoap = "Nu s-a putut folosi săpunul.",
 }
