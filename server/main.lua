@@ -1,9 +1,3 @@
-local Core = exports.vorp_core:GetCore()
-local BccUtils = exports['bcc-utils'].initiate()
-
----@type BCCWaterDebugLib
-local DBG = BCCWaterDebug
-
 local MaxCanteenDrinks = Config.maxCanteenDrinks
 local SickPlayers = {}
 
@@ -20,7 +14,7 @@ local function updateCanteenMetadata(src, canteenId, drinksLeft, durability)
         drinksLeft = drinksLeft,
         durability = durability
     })
-    DBG.Info(string.format('Updated canteen metadata for source %d: Drinks Left = %d, Durability = %d%%', src, drinksLeft, durability))
+    DBG:Info(string.format('Updated canteen metadata for source %d: Drinks Left = %d, Durability = %d%%', src, drinksLeft, durability))
 end
 
 -- Manage Filling a New or Empty Canteen
@@ -29,7 +23,7 @@ Core.Callback.Register('bcc-water:GetCanteenLevel', function(source, cb)
     local user = Core.getUser(src)
     -- Check if the user exists
     if not user then
-        DBG.Error(string.format('User not found for source: %d', src))
+        DBG:Error(string.format('User not found for source: %d', src))
         return cb(false)
     end
     local itemCanteen = Config.canteen
@@ -37,7 +31,7 @@ Core.Callback.Register('bcc-water:GetCanteenLevel', function(source, cb)
     -- Check if the canteen exists in the inventory
     if not canteen then
         Core.NotifyRightTip(src, _U('needCanteen'), 4000)
-        DBG.Warning(string.format('Canteen not found for source: %d', src))
+        DBG:Warning(string.format('Canteen not found for source: %d', src))
         return cb(false)
     end
     local meta = canteen['metadata']
@@ -45,16 +39,16 @@ Core.Callback.Register('bcc-water:GetCanteenLevel', function(source, cb)
     -- Fill the canteen if it's new or not full
     if isNewCanteen then
         updateCanteenMetadata(src, canteen.id, MaxCanteenDrinks, 100)
-        DBG.Info(string.format('Filled new canteen for source: %d', src))
+        DBG:Info(string.format('Filled new canteen for source: %d', src))
     else
         local drinksLeft = meta.drinksLeft
         local durability = meta.durability
         if drinksLeft < MaxCanteenDrinks then
             updateCanteenMetadata(src, canteen.id, MaxCanteenDrinks, durability)
-            DBG.Info(string.format('Refilled canteen for source: %d', src))
+            DBG:Info(string.format('Refilled canteen for source: %d', src))
         else
             Core.NotifyRightTip(src, _U('fullCanteen'), 4000)
-            DBG.Info(string.format('Canteen already full for source: %d', src))
+            DBG:Info(string.format('Canteen already full for source: %d', src))
             return cb(false)
         end
     end
@@ -67,7 +61,7 @@ Core.Callback.Register('bcc-water:UpdateCanteen', function(source, cb)
     local user = Core.getUser(src)
     -- Check if the user exists
     if not user then
-        DBG.Error(string.format('User not found for source: %d', src))
+        DBG:Error(string.format('User not found for source: %d', src))
         return cb(false)
     end
     local itemCanteen = Config.canteen
@@ -80,16 +74,16 @@ Core.Callback.Register('bcc-water:UpdateCanteen', function(source, cb)
     -- Decrement drinks left and update durability
     if drinksLeft and drinksLeft > 0 then
         updateCanteenMetadata(src, canteen.id, drinksLeft - 1, newDurability)
-        DBG.Info(string.format('Used canteen for source %d: Drinks Left = %d, New Durability = %d%%', src, drinksLeft - 1, newDurability))
+        DBG:Info(string.format('Used canteen for source %d: Drinks Left = %d, New Durability = %d%%', src, drinksLeft - 1, newDurability))
         -- Remove the canteen if durability is too low
         if newDurability and newDurability < canteenUsage then
             exports.vorp_inventory:subItemById(src, canteen.id)
             Core.NotifyRightTip(src, _U('brokeCanteen'), 4000)
-            DBG.Info(string.format('Canteen broke for source: %d', src))
+            DBG:Info(string.format('Canteen broke for source: %d', src))
         end
     else
         Core.NotifyRightTip(src, _U('emptyCanteen'), 4000)
-        DBG.Info(string.format('Canteen empty for source: %d', src))
+        DBG:Info(string.format('Canteen empty for source: %d', src))
         return cb(false)
     end
     cb(true)
@@ -100,14 +94,14 @@ RegisterNetEvent('bcc-water:UpdateSickness', function(isSick)
     local user = Core.getUser(src)
     -- Check if the user exists
     if not user then
-        DBG.Error(string.format('User not found for source: %d', src))
+        DBG:Error(string.format('User not found for source: %d', src))
         return
     end
     local character = user.getUsedCharacter
     local charid = character.charIdentifier
-    DBG.Info(string.format('Updating sickness for character ID: %d', charid))
+    DBG:Info(string.format('Updating sickness for character ID: %d', charid))
     SickPlayers[charid] = isSick and true or nil
-    DBG.Info(string.format('Sickness status for character ID %d: %s', charid, tostring(isSick)))
+    DBG:Info(string.format('Sickness status for character ID %d: %s', charid, tostring(isSick)))
 end)
 
 Core.Callback.Register('bcc-water:CheckSickness', function(source, cb)
@@ -115,16 +109,16 @@ Core.Callback.Register('bcc-water:CheckSickness', function(source, cb)
     local user = Core.getUser(src)
     -- Check if the user exists
     if not user then
-        DBG.Error(string.format('User not found for source: %d', src))
+        DBG:Error(string.format('User not found for source: %d', src))
         return cb(false)
     end
     local character = user.getUsedCharacter
     local charid = character.charIdentifier
     if SickPlayers[charid] then
-        DBG.Info(string.format('Sickness detected for character ID %d: %s', charid, tostring(SickPlayers[charid])))
+        DBG:Info(string.format('Sickness detected for character ID %d: %s', charid, tostring(SickPlayers[charid])))
         return cb(true)
     else
-        DBG.Info(string.format('No sickness detected for character ID %d', charid))
+        DBG:Info(string.format('No sickness detected for character ID %d', charid))
         return cb(false)
     end
 end)
@@ -138,7 +132,7 @@ Core.Callback.Register('bcc-water:GetItem', function(source, cb, itemType, itemA
     local user = Core.getUser(src)
     -- Check if the user exists
     if not user then
-        DBG.Error(string.format('User not found for source: %d', src))
+        DBG:Error(string.format('User not found for source: %d', src))
         return cb(false)
     end
     -- Set empty item and notifications based on item type
@@ -148,7 +142,7 @@ Core.Callback.Register('bcc-water:GetItem', function(source, cb, itemType, itemA
     local item = exports.vorp_inventory:getItem(src, emptyItem)
     if not item or item.count < itemAmount then
         Core.NotifyRightTip(src, notification, 4000)
-        DBG.Warning(string.format('Source %d does not have the required item: %s', src, emptyItem))
+        DBG:Warning(string.format('Source %d does not have the required item: %s', src, emptyItem))
         return cb(false)
     end
     -- Remove empty items
@@ -158,11 +152,11 @@ Core.Callback.Register('bcc-water:GetItem', function(source, cb, itemType, itemA
         if itemType == 'bottle' then
             local itemName = pump and Config.cleanBottle or Config.dirtyBottle
             exports.vorp_inventory:addItem(src, itemName, 1, { source = sourceType })
-            DBG.Info(string.format('Added item to source %d: %s, Pump: %s', src, itemName, tostring(pump)))
+            DBG:Info(string.format('Added item to source %d: %s, Pump: %s', src, itemName, tostring(pump)))
         elseif itemType == 'bucket' then
             local itemName = pump and Config.cleanBucket or Config.dirtyBucket
             exports.vorp_inventory:addItem(src, itemName, 1, { source = sourceType })
-            DBG.Info(string.format('Added item to source %d: %s, Pump: %s', src, itemName, tostring(pump)))
+            DBG:Info(string.format('Added item to source %d: %s, Pump: %s', src, itemName, tostring(pump)))
         end
     end
     cb(true)
@@ -180,15 +174,15 @@ exports.vorp_inventory:registerUsableItem(Config.canteen, function(data)
     -- Check if the canteen can be used
     if durability == nil or durability >= canteenUsage then
         TriggerClientEvent('bcc-water:UseCanteen', src)
-        DBG.Info(string.format('Canteen used by source: %d', src))
+        DBG:Info(string.format('Canteen used by source: %d', src))
     else
-        DBG.Warning(string.format('Canteen cannot be used by source: %d', src))
+        DBG:Warning(string.format('Canteen cannot be used by source: %d', src))
     end
 end)
 
 -- Clean Bottle (no sickness)
 if Config.useable.cleanBottle then
-    DBG.Info('Registering clean bottle as usable item')
+    DBG:Info('Registering clean bottle as usable item')
     exports.vorp_inventory:registerUsableItem(Config.cleanBottle, function(data)
         local src = data.source
         local emptyBottle = Config.emptyBottle
@@ -203,7 +197,7 @@ end
 
 -- Dirty Bottle (sickness chance)
 if Config.useable.dirtyBottle then
-    DBG.Info('Registering dirty bottle as usable item')
+    DBG:Info('Registering dirty bottle as usable item')
     exports.vorp_inventory:registerUsableItem(Config.dirtyBottle, function(data)
         local src = data.source
         local emptyBottle = Config.emptyBottle
@@ -217,7 +211,7 @@ if Config.useable.dirtyBottle then
 end
 
 if Config.useable.antidoteItem then
-    DBG.Info('Registering antidote item as usable item')
+    DBG:Info('Registering antidote item as usable item')
     exports.vorp_inventory:registerUsableItem(Config.antidoteItem, function(data)
         local src = data.source
         exports.vorp_inventory:closeInventory(src)
@@ -231,14 +225,14 @@ Core.Callback.Register('bcc-water:CheckItem', function(source, cb, itemName)
     local src = source
     local user = Core.getUser(src)
     if not user then
-        DBG.Error(string.format('User not found for source: %d', src))
+        DBG:Error(string.format('User not found for source: %d', src))
         return cb(false)
     end
 
     local item = exports.vorp_inventory:getItem(src, itemName)
     local hasItem = item and item.count > 0
 
-    DBG.Info(string.format('CheckItem for source %d, item %s: %s', src, itemName, tostring(hasItem)))
+    DBG:Info(string.format('CheckItem for source %d, item %s: %s', src, itemName, tostring(hasItem)))
     cb(hasItem)
 end)
 
@@ -247,18 +241,18 @@ Core.Callback.Register('bcc-water:RemoveItem', function(source, cb, itemName, am
     local src = source
     local user = Core.getUser(src)
     if not user then
-        DBG.Error(string.format('User not found for source: %d', src))
+        DBG:Error(string.format('User not found for source: %d', src))
         return cb(false)
     end
 
     local item = exports.vorp_inventory:getItem(src, itemName)
     if not item or item.count < amount then
-        DBG.Warning(string.format('Source %d does not have enough of item: %s (required: %d, has: %d)', src, itemName, amount, item and item.count or 0))
+        DBG:Warning(string.format('Source %d does not have enough of item: %s (required: %d, has: %d)', src, itemName, amount, item and item.count or 0))
         return cb(false)
     end
 
     exports.vorp_inventory:subItem(src, itemName, amount)
-    DBG.Info(string.format('Removed %d of item %s from source %d', amount, itemName, src))
+    DBG:Info(string.format('Removed %d of item %s from source %d', amount, itemName, src))
     cb(true)
 end)
 

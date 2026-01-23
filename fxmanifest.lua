@@ -7,12 +7,12 @@ author 'BCC Team'
 
 shared_scripts {
     'shared/configs/*.lua',
-    'shared/debug_init.lua',
 	'shared/locale.lua',
 	'shared/languages/*.lua'
 }
 
 client_scripts {
+    'client/client_init.lua',
 	'client/dataview.lua',
     'client/main.lua',
     'client/functions.lua',
@@ -21,8 +21,9 @@ client_scripts {
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
+    'server/server_init.lua',
     'server/database.lua',
 	'server/main.lua'
 }
 
-version '2.4.1'
+version '2.4.2'

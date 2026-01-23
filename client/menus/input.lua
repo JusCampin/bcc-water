@@ -1,9 +1,3 @@
-local Core = exports.vorp_core:GetCore()
-local FeatherMenu = exports['feather-menu'].initiate()
-
----@type BCCWaterDebugLib
-local DBG = BCCWaterDebug
-
 local InputMenu = FeatherMenu:RegisterMenu('input:menu', {
     top = '3%',
     left = '3%',

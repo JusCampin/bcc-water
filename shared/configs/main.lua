@@ -4,7 +4,7 @@ Config = {
     ---------------------------------------------------------------
 
     devMode = {
-        active  = true,      -- When active, you can restart the script while connected for testing (otherwise requires relog)
+        active  = false,      -- When active, you can restart the script while connected for testing (otherwise requires relog)
         command = 'WaterDev', -- Command to start the script functions
     },
     ---------------------------------------------------------------
