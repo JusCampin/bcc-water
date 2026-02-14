@@ -1,2 +1,5 @@
-<2.4.2>
-- Updated exports for CAS and SS Metabolisms
+<2.5.0>
+- Updated resource to handle multiple soap types
+- Added options to consume soap on use or make it reusable
+- Added soap durability tracking and display in item metadata if consumable
+- Added new language entries for soap durability and soap removed messages

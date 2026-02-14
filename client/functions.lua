@@ -293,25 +293,30 @@ function WashPlayer(animType)
 
     -- Check for soap requirement
     if Config.requireSoap then
-        local hasSoap = Core.Callback.TriggerAwait('bcc-water:CheckItem', Config.soapItem)
+        local hasSoap, soapItem = Core.Callback.TriggerAwait('bcc-water:CheckSoapItems', Config.soapItem)
         if not hasSoap then
             if Config.showMessages then
                 Core.NotifyRightTip(_U('noSoap'), 4000)
             end
-            DBG:Info('Player does not have required soap item.')
+            DBG:Info('Player does not have any required soap items.')
             return
         end
 
-        -- Remove soap item
-        local soapRemoved = Core.Callback.TriggerAwait('bcc-water:RemoveItem', Config.soapItem, 1)
-        if not soapRemoved then
+        -- Use soap item (with durability or consumption based on config)
+        local soapUsed, usedSoapItem = Core.Callback.TriggerAwait('bcc-water:UseSoapItem', Config.soapItem, Config.consumeSoap, Config.soapUses)
+        if not soapUsed then
             if Config.showMessages then
                 Core.NotifyRightTip(_U('failedToUseSoap'), 4000)
             end
-            DBG:Info('Failed to remove soap item.')
+            DBG:Info('Failed to use soap item.')
             return
         end
-        DBG:Info('Soap item consumed for washing.')
+        
+        if Config.consumeSoap then
+            DBG:Info(string.format('Soap item used for washing: %s', usedSoapItem or 'unknown'))
+        else
+            DBG:Info(string.format('Reusable soap item used for washing: %s', usedSoapItem or 'unknown'))
+        end
     end
 
     local animDict = ''

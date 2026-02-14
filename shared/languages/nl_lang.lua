@@ -24,4 +24,6 @@ Locales["nl_lang"] = {
     succumbed = "Je bent bezweken aan de ziekte...",
     noSoap = "Je hebt zeep nodig om jezelf te wassen!",
     failedToUseSoap = "Zeep gebruiken is mislukt.",
+    soapDurability = "Gebruikt",
+    soapUsedUp = "Je zeep is opgebruikt!",
 }

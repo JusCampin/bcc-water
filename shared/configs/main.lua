@@ -94,10 +94,16 @@ Config = {
     dirtyBottle  = 'bcc_dirty_bottle',
 
     antidoteItem = 'antidote', -- Item name that cures sickness
+    ---------------------------------------------------------------
 
     -- Soap Item Configuration
-    soapItem = 'bcc_soap_bar', -- Item name for soap
+    soapItem = {
+        'bcc_soap_bar',    -- Basic soap bar
+        --'perfumed_soap',   -- Perfumed soap
+    },
     requireSoap = false,       -- Set to true to require soap for washing
+    consumeSoap = true,        -- Set to false to make soap reusable (not consumed on use)
+    soapUses = 10,             -- Number of uses before soap item is removed (when consumeSoap is true)
     ---------------------------------------------------------------
 
     durability = {
@@ -110,7 +116,6 @@ Config = {
         cleanBottle  = true,
         dirtyBottle  = true,
         antidoteItem = true,
-        soapItem     = true,
     },
     ---------------------------------------------------------------
 

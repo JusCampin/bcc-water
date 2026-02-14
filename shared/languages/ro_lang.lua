@@ -24,4 +24,6 @@ Locales["ro_lang"] = {
     succumbed = "Ai cedat bolii...",
     noSoap = "Ai nevoie de săpun pentru a te spăla!",
     failedToUseSoap = "Nu s-a putut folosi săpunul.",
+    soapDurability = "Utilizări",
+    soapUsedUp = "Săpunul tău s-a terminat!",
 }

@@ -24,4 +24,6 @@ Locales["fr_lang"] = {
     succumbed = "Vous avez succombé à la maladie...",
     noSoap = "Vous avez besoin de savon pour vous laver !",
     failedToUseSoap = "Échec de l'utilisation du savon.",
+    soapDurability = "Utilisations",
+    soapUsedUp = "Votre savon est épuisé !",
 }

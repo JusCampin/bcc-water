@@ -7,14 +7,15 @@ local SickPlayers = {}
 ---@param durability number
 local function updateCanteenMetadata(src, canteenId, drinksLeft, durability)
     local description = _U('canteenDesc') .. '<br>'
-    .. _U('drinksLeft') .. ' : ' .. tostring(drinksLeft) .. '/' .. tostring(MaxCanteenDrinks) .. '<br>'
-    .. _U('Durability') .. ' : ' .. tostring(durability) .. '%'
+        .. _U('drinksLeft') .. ' : ' .. tostring(drinksLeft) .. '/' .. tostring(MaxCanteenDrinks) .. '<br>'
+        .. _U('Durability') .. ' : ' .. tostring(durability) .. '%'
     exports.vorp_inventory:setItemMetadata(src, canteenId, {
         description = description,
         drinksLeft = drinksLeft,
         durability = durability
     })
-    DBG:Info(string.format('Updated canteen metadata for source %d: Drinks Left = %d, Durability = %d%%', src, drinksLeft, durability))
+    DBG:Info(string.format('Updated canteen metadata for source %d: Drinks Left = %d, Durability = %d%%', src, drinksLeft,
+        durability))
 end
 
 -- Manage Filling a New or Empty Canteen
@@ -74,7 +75,8 @@ Core.Callback.Register('bcc-water:UpdateCanteen', function(source, cb)
     -- Decrement drinks left and update durability
     if drinksLeft and drinksLeft > 0 then
         updateCanteenMetadata(src, canteen.id, drinksLeft - 1, newDurability)
-        DBG:Info(string.format('Used canteen for source %d: Drinks Left = %d, New Durability = %d%%', src, drinksLeft - 1, newDurability))
+        DBG:Info(string.format('Used canteen for source %d: Drinks Left = %d, New Durability = %d%%', src, drinksLeft - 1,
+            newDurability))
         -- Remove the canteen if durability is too low
         if newDurability and newDurability < canteenUsage then
             exports.vorp_inventory:subItemById(src, canteen.id)
@@ -247,13 +249,84 @@ Core.Callback.Register('bcc-water:RemoveItem', function(source, cb, itemName, am
 
     local item = exports.vorp_inventory:getItem(src, itemName)
     if not item or item.count < amount then
-        DBG:Warning(string.format('Source %d does not have enough of item: %s (required: %d, has: %d)', src, itemName, amount, item and item.count or 0))
+        DBG:Warning(string.format('Source %d does not have enough of item: %s (required: %d, has: %d)', src, itemName,
+            amount, item and item.count or 0))
         return cb(false)
     end
 
     exports.vorp_inventory:subItem(src, itemName, amount)
     DBG:Info(string.format('Removed %d of item %s from source %d', amount, itemName, src))
     cb(true)
+end)
+
+-- Check if Player has any soap items from the table
+Core.Callback.Register('bcc-water:CheckSoapItems', function(source, cb, soapItems)
+    local src = source
+    local user = Core.getUser(src)
+    if not user then
+        DBG:Error(string.format('User not found for source: %d', src))
+        return cb(false, nil)
+    end
+
+    -- Check each soap item in the table
+    for _, soapItem in ipairs(soapItems) do
+        local item = exports.vorp_inventory:getItem(src, soapItem)
+        if item and item.count > 0 then
+            DBG:Info(string.format('CheckSoapItems for source %d, found soap: %s', src, soapItem))
+            return cb(true, soapItem)
+        end
+    end
+
+    DBG:Info(string.format('CheckSoapItems for source %d: no soap items found', src))
+    cb(false, nil)
+end)
+
+-- Remove or update soap item with durability tracking
+Core.Callback.Register('bcc-water:UseSoapItem', function(source, cb, soapItems, consumeSoap, maxUses)
+    local src = source
+    local user = Core.getUser(src)
+    if not user then
+        DBG:Error(string.format('User not found for source: %d', src))
+        return cb(false, nil)
+    end
+
+    -- Find the first available soap item
+    for _, soapItem in ipairs(soapItems) do
+        local item = exports.vorp_inventory:getItem(src, soapItem)
+        if item and item.count > 0 then
+            if not consumeSoap then
+                -- Soap is reusable, no removal or durability tracking
+                DBG:Info(string.format('Used reusable soap item %s for source %d', soapItem, src))
+                return cb(true, soapItem)
+            end
+
+            -- Get current uses from metadata
+            local currentUses = 1
+            if item.metadata and item.metadata.uses then
+                currentUses = item.metadata.uses + 1
+            end
+
+            if currentUses >= maxUses then
+                -- Remove the soap item as it's used up
+                exports.vorp_inventory:subItem(src, soapItem, 1)
+                DBG:Info(string.format('Soap item %s used up and removed from source %d after %d uses', soapItem, src, currentUses))
+                return cb(true, soapItem)
+            else
+                -- Update metadata with current uses using setItemMetadata
+                local metadata = item.metadata or {}
+                metadata.uses = currentUses
+                metadata.description = _U('soapDurability') .. ': ' .. tostring(currentUses) .. '/' .. tostring(maxUses)
+
+                exports.vorp_inventory:setItemMetadata(src, item.id, metadata)
+
+                DBG:Info(string.format('Updated soap item %s durability for source %d: %d/%d uses', soapItem, src, currentUses, maxUses))
+                return cb(true, soapItem)
+            end
+        end
+    end
+
+    DBG:Warning(string.format('Source %d does not have any soap items from the table', src))
+    cb(false, nil)
 end)
 
 BccUtils.Versioner.checkFile(GetCurrentResourceName(), 'https://github.com/BryceCanyonCounty/bcc-water')
