@@ -151,14 +151,15 @@ Core.Callback.Register('bcc-water:GetItem', function(source, cb, itemType, itemA
     exports.vorp_inventory:subItem(src, emptyItem, itemAmount)
     for i = 1, itemAmount do
         local sourceType = pump and 'pump' or 'wild'
+        local wildDirty  = not pump and Config.wild.dirtyItems
         if itemType == 'bottle' then
-            local itemName = pump and Config.cleanBottle or Config.dirtyBottle
+            local itemName = (pump or not wildDirty) and Config.cleanBottle or Config.dirtyBottle
             exports.vorp_inventory:addItem(src, itemName, 1, { source = sourceType })
-            DBG:Info(string.format('Added item to source %d: %s, Pump: %s', src, itemName, tostring(pump)))
+            DBG:Info(string.format('Added item to source %d: %s, Pump: %s, WildDirty: %s', src, itemName, tostring(pump), tostring(wildDirty)))
         elseif itemType == 'bucket' then
-            local itemName = pump and Config.cleanBucket or Config.dirtyBucket
+            local itemName = (pump or not wildDirty) and Config.cleanBucket or Config.dirtyBucket
             exports.vorp_inventory:addItem(src, itemName, 1, { source = sourceType })
-            DBG:Info(string.format('Added item to source %d: %s, Pump: %s', src, itemName, tostring(pump)))
+            DBG:Info(string.format('Added item to source %d: %s, Pump: %s, WildDirty: %s', src, itemName, tostring(pump), tostring(wildDirty)))
         end
     end
     cb(true)

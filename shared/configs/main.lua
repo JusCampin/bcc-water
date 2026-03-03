@@ -55,12 +55,13 @@ Config = {
 
     -- Manage Activities in Rivers and Lakes (Wild Waters)
     wild = {
-        active  = true,       -- Enable the Use of Wild Waters
-        canteen = true,       -- Allow to Fill Canteen
-        bucket  = true,       -- Allow to Fill Bucket
-        bottle  = true,       -- Allow to Fill Bottle
-        wash    = true,       -- Allow Player to Wash
-        drink   = true,       -- Allow Player to Drink
+        active      = true,       -- Enable the Use of Wild Waters
+        canteen     = true,       -- Allow to Fill Canteen
+        bucket      = true,       -- Allow to Fill Bucket
+        bottle      = true,       -- Allow to Fill Bottle
+        wash        = true,       -- Allow Player to Wash
+        drink       = true,       -- Allow Player to Drink
+        dirtyItems  = true,       -- Set to false to receive clean bottles/buckets from wild water instead of dirty ones
         multi   = {
             bottles = true,   -- Allow to Fill Multiple Bottles at Once
             bottleAmount = 5, -- Maximum Amount of Bottles to Fill at Once
